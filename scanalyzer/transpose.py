@@ -16,8 +16,8 @@ import sys, os.path, time
 from struct import Struct
 import numpy as np
 
-from .. import binary_type
-from ..cli import die, warn
+from pwkit import binary_type
+from pwkit.cli import die, warn
 from . import mtutil
 from .tdata import GridAxis, VisGrid, TransposeData
 
@@ -437,7 +437,7 @@ def ms_transpose (vpath, tpath, transpose_args):
         raise t, v, tb
 
 
-from ..environments.casa import util as casautil
+from pwkit.environments.casa import util as casautil
 b = casautil.sanitize_unicode
 
 def _ms_transpose (vpath, tpath, transpose_args):

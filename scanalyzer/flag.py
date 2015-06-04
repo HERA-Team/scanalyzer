@@ -290,7 +290,7 @@ class FlagImplementation (FlagAPI):
 
 
     def try_load (self):
-        from ..io import try_open
+        from pwkit.io import try_open
 
         f = try_open (self.path)
         if f is not None:

@@ -1,0 +1,7 @@
+*.pyc
+/*.egg-info
+/Makefile
+/build
+/config.status
+/dist
+/docs/build
