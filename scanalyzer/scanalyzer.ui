@@ -1,0 +1,291 @@
+<?xml version="1.0"?>
+<interface>
+  <requires lib="gtk+" version="2.14"/>
+  <!-- interface-naming-policy project-wide -->
+  <object class="GtkAdjustment" id="adjustment_sa_mdlclip">
+    <property name="upper">10000</property>
+    <property name="step_increment">1</property>
+    <property name="page_increment">10</property>
+  </object>
+  <object class="GtkWindow" id="scanalyzer">
+    <property name="events">GDK_KEY_PRESS_MASK | GDK_STRUCTURE_MASK</property>
+    <property name="title" translatable="yes">Scanalyzer</property>
+    <property name="window_position">center</property>
+    <property name="default_width">700</property>
+    <signal name="key_press_event" handler="on_scanalyzer_key_press_event"/>
+    <signal name="delete_event" handler="on_scanalyzer_delete_event"/>
+    <child>
+      <object class="GtkHBox" id="hbox6">
+        <property name="visible">True</property>
+        <child>
+          <object class="GtkVBox" id="vbox7">
+            <property name="visible">True</property>
+            <property name="border_width">6</property>
+            <property name="orientation">vertical</property>
+            <property name="spacing">2</property>
+            <child>
+              <object class="GtkLabel" id="label15">
+                <property name="visible">True</property>
+                <property name="xalign">0</property>
+                <property name="label" translatable="yes">&lt;b&gt;Selection:&lt;/b&gt;</property>
+                <property name="use_markup">True</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkComboBox" id="sel_sup_cb">
+                <property name="visible">True</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="position">1</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkComboBox" id="sel_bltype_cb">
+                <property name="visible">True</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="position">2</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkComboBox" id="sel_pol_cb">
+                <property name="visible">True</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="position">3</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkHBox" id="hbox1">
+                <property name="visible">True</property>
+                <child>
+                  <object class="GtkComboBox" id="sel_apfilter_ant_cb">
+                    <property name="visible">True</property>
+                  </object>
+                  <packing>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkComboBox" id="sel_apfilter_pol_cb">
+                    <property name="visible">True</property>
+                  </object>
+                  <packing>
+                    <property name="expand">False</property>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="position">4</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="label16">
+                <property name="visible">True</property>
+                <property name="xalign">0</property>
+                <property name="label" translatable="yes">&lt;b&gt;Sorting:&lt;/b&gt;</property>
+                <property name="use_markup">True</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="position">5</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkComboBox" id="sort_cb">
+                <property name="visible">True</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="position">6</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="label1">
+                <property name="visible">True</property>
+                <property name="xalign">0</property>
+                <property name="label" translatable="yes">&lt;b&gt;Transform:&lt;/b&gt;</property>
+                <property name="use_markup">True</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="position">7</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkComboBox" id="xform_cb">
+                <property name="visible">True</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
+                <property name="position">8</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkVBox" id="xform_vb">
+                <property name="visible">True</property>
+                <property name="orientation">vertical</property>
+                <child>
+                  <placeholder/>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="fill">False</property>
+                <property name="position">9</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkLabel" id="label17">
+                <property name="visible">True</property>
+                <property name="xalign">0</property>
+                <property name="label" translatable="yes">&lt;b&gt;Show:&lt;/b&gt;</property>
+                <property name="use_markup">True</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="position">10</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkComboBox" id="show_cb">
+                <property name="visible">True</property>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="position">11</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkButton" id="help_btn">
+                <property name="label">gtk-help</property>
+                <property name="visible">True</property>
+                <property name="can_focus">True</property>
+                <property name="receives_default">True</property>
+                <signal name="clicked" handler="on_help_btn_clicked"/>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="pack_type">end</property>
+                <property name="position">12</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="expand">False</property>
+            <property name="position">0</property>
+          </packing>
+        </child>
+        <child>
+          <object class="GtkVBox" id="vbox8">
+            <property name="visible">True</property>
+            <property name="orientation">vertical</property>
+            <child>
+              <object class="GtkDrawingArea" id="sa_darea">
+                <property name="can-default">True</property>
+                <property name="can-focus">True</property>
+                <property name="events">GDK_EXPOSURE_MASK | GDK_POINTER_MOTION_MASK | GDK_BUTTON_PRESS_MASK | GDK_BUTTON_RELEASE_MASK | GDK_KEY_PRESS_MASK | GDK_KEY_RELEASE_MASK | GDK_STRUCTURE_MASK | GDK_LEAVE_NOTIFY_MASK</property>
+                <signal name="draw" handler="on_sa_darea_draw"/>
+                <signal name="button_press_event" handler="on_sa_darea_button_press_event"/>
+                <signal name="motion_notify_event" handler="on_sa_darea_motion_notify_event"/>
+                <signal name="button_release_event" handler="on_sa_darea_button_release_event"/>
+                <signal name="key-press-event" handler="on_darea_key_press_event"/>
+                <signal name="key-release-event" handler="on_darea_key_release_event"/>
+                <signal name="leave-notify-event" handler="on_darea_leave_notify_event"/>
+              </object>
+              <packing>
+                <property name="position">0</property>
+              </packing>
+            </child>
+            <child>
+              <object class="GtkHBox" id="hbox2">
+                <property name="visible">True</property>
+                <child>
+                  <object class="GtkLabel" id="info_bp1_l">
+                    <property name="visible">True</property>
+                    <property name="label" translatable="yes">label</property>
+                  </object>
+                  <packing>
+                    <property name="position">0</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="info_bp2_l">
+                    <property name="visible">True</property>
+                    <property name="label" translatable="yes">label</property>
+                  </object>
+                  <packing>
+                    <property name="position">1</property>
+                  </packing>
+                </child>
+                <child>
+                  <object class="GtkLabel" id="info_bp3_l">
+                    <property name="visible">True</property>
+                    <property name="label" translatable="yes">label</property>
+                  </object>
+                  <packing>
+                    <property name="position">2</property>
+                  </packing>
+                </child>
+              </object>
+              <packing>
+                <property name="expand">False</property>
+                <property name="position">1</property>
+              </packing>
+            </child>
+          </object>
+          <packing>
+            <property name="position">1</property>
+          </packing>
+        </child>
+      </object>
+    </child>
+  </object>
+  <object class="GtkWindow" id="help_win">
+    <property name="title" translatable="yes">Scanalyzer Keys</property>
+    <signal name="delete_event" handler="on_help_deleted"/>
+    <child>
+      <object class="GtkLabel" id="sa_help_label">
+        <property name="visible">True</property>
+        <property name="label" translatable="yes">&lt;b&gt;q/w&lt;/b&gt;: goto prev/next basepol
+&lt;b&gt;f/l&lt;/b&gt;: goto first/last basepol
+
+&lt;b&gt;j/k&lt;/b&gt;: show prev/next data quantity (real,imag,...)
+&lt;b&gt;left-click/right-click&lt;/b&gt;: same
+&lt;b&gt;a&lt;/b&gt;: show/unshow all data (even flagged data)
+&lt;b&gt;t&lt;/b&gt;: show/unshow data before all transforms
+&lt;b&gt;U&lt;/b&gt;: toggle availability of unusual data views
+&lt;b&gt;Ctrl&lt;/b&gt;: hold to show data detail readout
+&lt;b&gt;1/2/3&lt;/b&gt;: resize window to fit data in 1x1/2x2/1x2 pixels per point
+
+&lt;b&gt;h/v&lt;/b&gt;: make sel span horiz/vertically
+&lt;b&gt;z/Z&lt;/b&gt;: zoom to selection / unzoom
+
+&lt;b&gt;p&lt;/b&gt;: print sel as flag specification
+&lt;b&gt;b&lt;/b&gt;: flag sel on all basepols
+&lt;b&gt;c&lt;/b&gt;: flag sel on cur basepol
+&lt;b&gt;s&lt;/b&gt;: suppress current basepol (all freqs/times)
+&lt;b&gt;e&lt;/b&gt;: show/select existing freq/time boxes
+   (&lt;b&gt;spc&lt;/b&gt;: toggle moused-over box for this bp
+    &lt;b&gt;u&lt;/b&gt;: update resized box
+    &lt;b&gt;Del&lt;/b&gt;: delete selected box
+    &lt;b&gt;m&lt;/b&gt;: flag box containing highest-amp point
+    &lt;b&gt;E&lt;/b&gt;: toggle shading of existing boxes
+    &lt;b&gt;M&lt;/b&gt;: temporary magic flag!)
+
+&lt;b&gt;Ctrl-w/Ctrl-q&lt;/b&gt;: quit</property>
+        <property name="use_markup">True</property>
+      </object>
+    </child>
+  </object>
+</interface>
