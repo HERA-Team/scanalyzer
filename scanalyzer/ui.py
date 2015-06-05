@@ -447,7 +447,7 @@ class Scanalyzer (object):
         ls = Gtk.ListStore (int, str)
         ls.append ((-1, '(All ants)'))
         for antnum in sorted (set (util.apAnt (ap) for ap in seenaps)):
-            ls.append ((antnum, str (antnum)))
+            ls.append ((antnum, self.format_antnum (antnum)))
         cb = get ('sel_apfilter_ant_cb')
         cr = Gtk.CellRendererText ()
         cb.pack_start (cr, True)
@@ -667,11 +667,34 @@ class Scanalyzer (object):
             self.invalidate (INVALIDATE_VGRID)
 
 
+    def format_antnum (self, antnum):
+        "Note that this operates on 1-based antenna names."
+        if self.tdata_base.hasFeature ('antnames'):
+            return self.tdata_base._antnames[antnum - 1]
+        return str (antnum)
+
+
+    def format_ap (self, ap):
+        antidx = ap >> 3
+        fp = ap & 0x7
+
+        if self.tdata_base.hasFeature ('antnames'):
+            s = self.tdata_base._antnames[antidx]
+        else:
+            s = str (antidx + 1)
+
+        return s + util.fPolNames[fp]
+
+
+    def format_bp (self, bp):
+        return '-'.join (self.format_ap (ap) for ap in bp)
+
+
     def _bpsel_labels_stringify (self, index):
         if index < 0 or index >= len (self.bpsel_list):
             return '(none)'
 
-        s = util.fmtBP (self.bpsel_list[index])
+        s = self.format_bp (self.bpsel_list[index])
 
         if index != self.bpsel_index:
             return s
@@ -2062,7 +2085,7 @@ uvw/dist = <b>%.0f %.0f %.0f</b> / <b>%.0f</b> λ
         bp = self._bpsel_get_current ()
 
         print ('Current selection:')
-        print ('   ', 'basepol', util.fmtBP (bp))
+        print ('   ', 'basepol', self.format_bp (bp))
 
         t1, t2, f1, f2 = self._sel_canonical (spans=True)
         if t1 is None and f1 is None:
