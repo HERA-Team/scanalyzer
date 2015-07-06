@@ -524,7 +524,7 @@ def _ms_transpose (vpath, tpath, transpose_args):
 
     # Get table of times and basepols
 
-    ms.iterinit ()
+    ms.iterinit (maxrows=65536) # XXX semi-arbitrary constant
     ms.iterorigin ()
     colnames = b('time antenna1 antenna2 data_desc_id'.split ())
     nrecs = 0
@@ -534,7 +534,6 @@ def _ms_transpose (vpath, tpath, transpose_args):
 
     while True:
         cols = ms.getdata (items=colnames)
-        # flag is (npol, nchan, chunksize)
         # time is (chunksize)
 
         for i in xrange (cols['time'].size):
@@ -751,8 +750,8 @@ def _ms_transpose (vpath, tpath, transpose_args):
     datacol = transpose_args.get ('datacol', 'data')
     colnames = b([datacol] +
                  'time antenna1 antenna2 data_desc_id flag uvw sigma'.split ())
-
-    ms.iterinit ()
+    maxrows = CACHE_SIZE // (2 * maxnchan * 16) # 128 bits per viz.; factor of 2 safety margin
+    ms.iterinit (maxrows=maxrows)
     ms.iterorigin ()
 
     while True:
