@@ -267,7 +267,8 @@ class FlagImplementation (FlagAPI):
     def _save (self, stream):
         # We can currently write out our data in ARF multiflag
         # format and still save/restore all of the information we need.
-        from .mtutil import jdToFull, fmtBP
+        from .ui import jdToFull
+        from .mtutil import fmtBP
 
         s = sorted ((rec for rec in self.records if normalrecord (rec)),
                      cmp=cmprecord)
@@ -282,7 +283,7 @@ class FlagImplementation (FlagAPI):
             if bpmatch is not None:
                 record.append ('basepol(%s)' % ','.join (fmtBP (x) for x in sorted (bpmatch)))
 
-            print >>stream, ' '.join (record)
+            print (' '.join (record), file=stream)
 
 
     def _load (self, stream):
