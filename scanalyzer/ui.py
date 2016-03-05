@@ -107,9 +107,9 @@ class DualRampRenderer (SimpleRenderer):
 
         destimg[:] = (2*d - 1).clip (0, 1) * 255
         np.left_shift (destimg, 8, destimg)
-        np.add ((1 - (2*d).clip (0, 1)) * 255, destimg, destimg)
+        np.add ((1 - (2*d).clip (0, 1)) * 255, destimg, destimg, casting='unsafe')
         np.left_shift (destimg, 8, destimg)
-        np.add ((0.5 - np.abs (d - 0.5)) * 255, destimg, destimg)
+        np.add ((0.5 - np.abs (d - 0.5)) * 255, destimg, destimg, casting='unsafe')
 
 
 class WrappingRenderer (SimpleRenderer):
@@ -128,10 +128,10 @@ class WrappingRenderer (SimpleRenderer):
         destimg[:] = (ttp2 - np.abs (d.clip (-p2, tp2) + tp2)) * 255 / ttp2
         np.left_shift (destimg, 8, destimg)
         np.add ((ttp2 - np.abs (d.clip (-tp2, p2) - tp2)) * 255 / ttp2,
-               destimg, destimg)
+               destimg, destimg, casting='unsafe')
         np.left_shift (destimg, 8, destimg)
         np.add ((ttp2 - np.abs (((d % (2 * p2)) - p2).clip (-ttp2, ttp2))) * 255 / ttp2,
-               destimg, destimg)
+               destimg, destimg, casting='unsafe')
 
 
 # VGrid renderers take a vgrid as an argument and have the option of
