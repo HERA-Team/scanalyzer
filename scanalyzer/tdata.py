@@ -19,6 +19,9 @@ __all__ = (b'''GridAxis VisGrid TransposeData DataTransform
            CustomTransform''').split ()
 
 import numpy as np
+
+import gi
+gi.require_version ('Gtk', '3.0')
 from gi.repository import Gtk
 
 
@@ -463,44 +466,44 @@ class AverageTransform (DataTransform):
         l = Gtk.Label ()
         l.set_markup (r'<b>Average</b>')
         l.set_alignment (0.0, 0.5)
-        t.attach (l, 0, 2, 0, 1, Gtk.FILL, Gtk.FILL, 2, 2)
+        t.attach (l, 0, 2, 0, 1, Gtk.AttachOptions.FILL, Gtk.AttachOptions.FILL, 2, 2)
 
         l = Gtk.Label ('F binsize:')
         l.set_alignment (1.0, 0.5)
-        t.attach (l, 0, 1, 1, 2, Gtk.FILL, Gtk.FILL, 2, 2)
+        t.attach (l, 0, 1, 1, 2, Gtk.AttachOptions.FILL, Gtk.AttachOptions.FILL, 2, 2)
 
         l = Gtk.Label ('T binsize:')
         l.set_alignment (1.0, 0.5)
-        t.attach (l, 0, 1, 2, 3, Gtk.FILL, Gtk.FILL, 2, 2)
+        t.attach (l, 0, 1, 2, 3, Gtk.AttachOptions.FILL, Gtk.AttachOptions.FILL, 2, 2)
 
         l = Gtk.Label ('Slop:')
         l.set_alignment (1.0, 0.5)
-        t.attach (l, 0, 1, 3, 4, Gtk.FILL, Gtk.FILL, 2, 2)
+        t.attach (l, 0, 1, 3, 4, Gtk.AttachOptions.FILL, Gtk.AttachOptions.FILL, 2, 2)
 
         s = Gtk.SpinButton ()
         # FIXME derive limits from actual grid (here and tbins)
-        s.get_adjustment ().set_all (self.fbins, 1, 10000, 1, 8, 0)
+        s.set_adjustment (Gtk.Adjustment (self.fbins, 1, 10000, 1, 8, 0))
         def changed (adj):
             self.fbins = int (adj.get_value ())
             invalidate ()
         s.get_adjustment ().connect ('value-changed', changed)
-        t.attach (s, 1, 2, 1, 2, Gtk.EXPAND|Gtk.FILL, Gtk.FILL, 2, 2)
+        t.attach (s, 1, 2, 1, 2, Gtk.AttachOptions.EXPAND|Gtk.AttachOptions.FILL, Gtk.AttachOptions.FILL, 2, 2)
 
         s = Gtk.SpinButton ()
-        s.get_adjustment ().set_all (self.tbins, 1, 10000, 1, 8, 0)
+        s.set_adjustment (Gtk.Adjustment (self.tbins, 1, 10000, 1, 8, 0))
         def changed (adj):
             self.tbins = int (adj.get_value ())
             invalidate ()
         s.get_adjustment ().connect ('value-changed', changed)
-        t.attach (s, 1, 2, 2, 3, Gtk.EXPAND|Gtk.FILL, Gtk.FILL, 2, 2)
+        t.attach (s, 1, 2, 2, 3, Gtk.AttachOptions.EXPAND|Gtk.AttachOptions.FILL, Gtk.AttachOptions.FILL, 2, 2)
 
         s = Gtk.SpinButton (digits=2)
-        s.get_adjustment ().set_all (self.slop, 0, 1, 0.1, 0.3, 0)
+        s.set_adjustment (Gtk.Adjustment (self.slop, 0, 1, 0.1, 0.3, 0))
         def changed (adj):
             self.slop = adj.get_value ()
             invalidate ()
         s.get_adjustment ().connect ('value-changed', changed)
-        t.attach (s, 1, 2, 3, 4, Gtk.EXPAND|Gtk.FILL, Gtk.FILL, 2, 2)
+        t.attach (s, 1, 2, 3, 4, Gtk.AttachOptions.EXPAND|Gtk.AttachOptions.FILL, Gtk.AttachOptions.FILL, 2, 2)
 
         return t
 
