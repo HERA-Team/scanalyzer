@@ -2,7 +2,7 @@
 # Copyright 2015 Peter Williams <peter@newton.cx> and collaborators.
 # Licensed under the MIT License.
 
-"""pwkit.scanalyzer.ui - implementation of the UI.
+"""scanalyzer.ui - implementation of the UI.
 
 This uses the Gtk+3 graphical toolkit.
 
@@ -301,7 +301,7 @@ class Scanalyzer (object):
 
         builder = self.builder = Gtk.Builder ()
         from pkg_resources import resource_filename
-        builder.add_from_file (resource_filename ('pwkit.scanalyzer', 'scanalyzer.ui'))
+        builder.add_from_file (resource_filename ('scanalyzer', 'scanalyzer.ui'))
 
         events = {'on_sa_darea_draw': self._draw,
                   'on_sa_darea_button_press_event': self._button_press,

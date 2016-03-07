@@ -2,7 +2,7 @@
 # Copyright 2015 Peter Williams <peter@newton.cx> and collaborators.
 # Licensed under the MIT License.
 
-"""pwkit.scanalyzer.transpose - interactive analysis of interferometric visbilities.
+"""scanalyzer.transpose - interactive analysis of interferometric visbilities.
 
 This uses the Gtk+3 graphical toolkit. This is inherited from some old
 MIRIAD-targeted code so it's pretty messy.

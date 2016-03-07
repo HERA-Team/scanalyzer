@@ -2,7 +2,7 @@
 # Copyright 2015 Peter Williams <peter@newton.cx> and collaborators.
 # Licensed under the MIT License.
 
-"""pwkit.scanalyzer.tdata - interfaces for accessing transposed UV data
+"""scanalyzer.tdata - interfaces for accessing transposed UV data
 
 In some ways, it might be more correct to call this gridded UV data, but we're
 gridding in the freq/time plane, and the terminology might be confusing with

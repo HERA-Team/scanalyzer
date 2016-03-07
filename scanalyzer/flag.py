@@ -2,7 +2,7 @@
 # Copyright 2015 Peter Williams <peter@newton.cx> and collaborators.
 # Licensed under the MIT License.
 
-"""pwkit.scanalyzer.flag - storing and editing flag information for UV data
+"""scanalyzer.flag - storing and editing flag information for UV data
 
 We consider a limited form of flags: they are regions in the
 frequency/time/basepol space.

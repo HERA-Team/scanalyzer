@@ -2,7 +2,7 @@
 # Copyright 2015 Peter Williams <peter@newton.cx> and collaborators.
 # Licensed under the MIT License.
 
-"""pwkit.scanalyzer.mtutil - miriad-python utilities
+"""scanalyzer.mtutil - miriad-python utilities
 
 This file is copied from miriad-python's mirtask.util, preserving only the
 bits needed for the scanalyzer.
