@@ -56,6 +56,9 @@ Launch with
 scanalyzer go <visibility-data-set> <output-flag-file-name>
 ```
 
+**TODO**: flags will be saved to the output file on the fly, but the file
+cannot currently be reloaded at a later invocation!
+
 Either MIRIAD or CASA visibility data sets are supported if the necessary
 supporting modules are available. There are a few other modes that can be
 learned about by simply running `scanalyzer` with no arguments.
@@ -63,10 +66,13 @@ learned about by simply running `scanalyzer` with no arguments.
 Super-quick summary of the interactive interface:
 
 * `q` and `w` to move between baselines
+* `f` and `l` to go to the first and last basepols in the current selection
 * `j` and `k` or left-button and right-button single clicks to move between looking at the
   real, imaginary, amplitude, and phase components.
 * `a` to toggle showing of flagged data
 * Hold down the `Ctrl` key to get a live readout of data properties
+* `s` to flag the current basepol at all frequencies and times
+* `Ctrl-w` or `Ctrl-q` to quit.
 
 Draw boxes by clicking and dragging, then:
 
@@ -78,6 +84,8 @@ Draw boxes by clicking and dragging, then:
 
 Use `e` to toggle the box-editing mode where you can see existing boxes, apply
 or unapply them to the current baseline, and edit their shapes.
+
+Many other undocumented features exist.
 
 
 Authors
