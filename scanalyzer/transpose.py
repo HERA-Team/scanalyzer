@@ -123,7 +123,10 @@ def savevariable (stream, name, array):
 
 
 def _mir_transpose (vpath, tpath, unused_transpose_args):
-    vis = UVData (vpath) # XXX approximate
+    from miriad import VisData
+    from mirtask.util import mir2pbp32
+    from . import visobjs
+    vis = VisData (vpath)
 
     # Pass 1: build up list of basepols, times
 
@@ -333,7 +336,10 @@ def _mir_transpose (vpath, tpath, unused_transpose_args):
         uvw = pream[:3]
         t = pream[3]
         pbp = mir2pbp32 (inp, pream)
-        weight = 1. / inp.getVariance ()
+        var = inp.getVariance ()
+        if var == 0:
+            var = 1.
+        weight = 1. / var
 
         if currec % 500 == 0 and currec:
             now = time.time ()

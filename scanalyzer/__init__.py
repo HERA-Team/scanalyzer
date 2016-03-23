@@ -1,5 +1,5 @@
 # -*- mode: python; coding: utf-8 -*-
-# Copyright 2015 Peter Williams <peter@newton.cx> and collaborators.
+# Copyright 2015-2016 Peter Williams <peter@newton.cx> and collaborators.
 # Licensed under the MIT License.
 
 """scanalyzer - interactive analysis of interferometric visbilities.
@@ -10,7 +10,7 @@ MIRIAD-targeted code so it's pretty messy.
 """
 from __future__ import absolute_import, division, print_function, unicode_literals
 
-__all__ = (b'get_transposed launch').split ()
+__all__ = str('get_transposed launch').split ()
 
 from os.path import exists, join
 
@@ -36,8 +36,12 @@ def get_transposed (path, transpose_args):
         vhash = h.digest ()
         tfunc = transpose.ms_transpose
     else:
-        # TODO: put MIRIAD support back in.
-        raise PKError ('unsupported dataset %r (MIRIAD support has been disabled)', path)
+        # HAAACK due to disappearance of my quickHash() function.
+        import hashlib
+        h = hashlib.sha1 ()
+        h.update (path)
+        vhash = h.digest ()
+        tfunc = transpose.mir_transpose
 
     tpath = 'transpose.' + vhash.encode ('hex') + '.dat'
 

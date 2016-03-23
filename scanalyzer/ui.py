@@ -1553,7 +1553,7 @@ class Scanalyzer (object):
                     self.darea.grab_remove ()
                     self.grabbed = False
 
-                widgetGetWindow (self.darea).set_cursor (None)
+                self.darea.get_window ().set_cursor (None)
 
         self.darea.queue_draw ()
 
@@ -1637,9 +1637,9 @@ class Scanalyzer (object):
 
         if self.boxsel_resizemode != rm:
             # Updated direction.
-            curs = Gdk.cursor_new_from_name (darea.get_display (),
+            curs = Gdk.Cursor.new_from_name (darea.get_display (),
                                                  _resizeCursors[self.boxsel_resizemode])
-            widgetGetWindow (darea).set_cursor (curs)
+            darea.get_window ().set_cursor (curs)
 
         self.darea.queue_draw ()
 
@@ -1648,7 +1648,7 @@ class Scanalyzer (object):
         sx, sy = self._event_to_scalar (widget, event, clamp=True, lattice=True)
         self._boxsel_resize_motion (sx, sy)
         self.boxsel_resizemode = RESIZE_NONE
-        widgetGetWindow (self.darea).set_cursor (None)
+        self.darea.get_window ().set_cursor (None)
 
 
     def _boxsel_update (self):
@@ -2015,9 +2015,12 @@ uvw/dist = <b>%.0f %.0f %.0f</b> / <b>%.0f</b> λ
                 if rm == RESIZE_NONE:
                     curs = None
                 else:
-                    curs = Gdk.cursor_new_from_name (widget.get_display (),
-                                                         _resizeCursors[rm])
-                widgetGetWindow (widget).set_cursor (curs)
+                    try:
+                        curs = Gdk.Cursor.new_from_name (widget.get_display (), _resizeCursors[rm])
+                    except TypeError:
+                        curs = None # HACK: cursor lookup busted on Anaconda Gtk install?
+
+                widget.get_window ().set_cursor (curs)
                 self.boxsel_resizemode = rm
 
         if event.state & Gdk.ModifierType.CONTROL_MASK:
