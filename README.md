@@ -66,24 +66,25 @@ learned about by simply running `scanalyzer` with no arguments.
 Super-quick summary of the interactive interface:
 
 * `q` and `w` to move between baselines
-* `f` and `l` to go to the first and last basepols in the current selection
-* `j` and `k` or left-button and right-button single clicks to move between looking at the
-  real, imaginary, amplitude, and phase components.
-* `a` to toggle showing of flagged data
+* `f` and `l` to go to the **f**irst and **l**ast basepols in the current
+  selection
+* `j` and `k` or left-button and right-button single clicks to move between
+  looking at the real, imaginary, amplitude, and phase components.
+* `a` to toggle showing of **a**ll or only unflagged data
 * Hold down the `Ctrl` key to get a live readout of data properties
-* `s` to flag the current basepol at all frequencies and times
+* `s` to flag (**s**uppress) the current basepol at all frequencies and times
 * `Ctrl-w` or `Ctrl-q` to quit.
 
 Draw boxes by clicking and dragging, then:
 
-* `z` to zoom in to that box; `Z` to zoom out
-* `c` to flag the box only on the current baseline
-* `b` to flag it on all baselines
-* `h` to extend the box infinitely in the horizontal (frequency) direction
-* `v` to extend the box infinitely in the vertical (time) direction
+* `z` to **z**oom in to that box; `Z` (capital zee) to zoom out
+* `c` to flag the box only on the **c**urrent baseline
+* `b` to flag it on all **b**aselines
+* `h` to extend the box infinitely in the **h**orizontal (frequency) direction
+* `v` to extend the box infinitely in the **v**ertical (time) direction
 
-Use `e` to toggle the box-editing mode where you can see existing boxes, apply
-or unapply them to the current baseline, and edit their shapes.
+Use `e` to toggle the box-**e**diting mode where you can see existing boxes,
+apply or unapply them to the current baseline, and edit their shapes.
 
 Many other undocumented features exist.
 
