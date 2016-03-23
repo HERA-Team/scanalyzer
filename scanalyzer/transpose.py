@@ -443,10 +443,10 @@ def ms_transpose (vpath, tpath, transpose_args):
         raise t, v, tb
 
 
-from pwkit.environments.casa import util as casautil
-b = casautil.sanitize_unicode
-
 def _ms_transpose (vpath, tpath, transpose_args):
+    from pwkit.environments.casa import util as casautil
+    b = casautil.sanitize_unicode
+
     def vispath (*args):
         return b(os.path.join (vpath, *args))
 

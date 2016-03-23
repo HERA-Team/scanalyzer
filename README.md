@@ -26,6 +26,12 @@ It depends on a few packages that you may not already have installed:
   conda install -c pkgw gtk3 pygobject3
   ```
 
+* The `pwkit` support library, installable using PIP or Conda:
+
+  ```
+  conda install -c pkgw pwkit
+  ```
+
 * If you want to read MIRIAD data sets, you need the `miriad-python` package.
   **TODO**: this will be the pain point in the installation until I make some
   tidier packages for Anaconda. You can learn about downloading and installing
