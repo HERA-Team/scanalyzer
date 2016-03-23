@@ -3,6 +3,8 @@ scanalyzer
 
 An interactive visualizer for interferometric visibilities.
 
+![Screenshot](http://newton.cx/~peter/files/scanalyzer-screenshot.png)
+
 
 Installation
 ------------
