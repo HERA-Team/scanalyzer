@@ -64,12 +64,11 @@ def get_transposed (path, transpose_args):
 def launch (path, flagpath=None, transpose_args={}):
     tfile = get_transposed (path, transpose_args)
 
-    if flagpath is None:
-        flags = None
-    else:
-        from .flag import FlagImplementation
-        flags = FlagImplementation (flagpath)
-        flags.try_load ()
+    # NOTE: if flagpath is None, FlagImplementation does stuff but will treat
+    # save/load as noops.
+    from .flag import FlagImplementation
+    flags = FlagImplementation (flagpath)
+    flags.try_load ()
 
     from gi.repository import Gtk
     from .ui import Scanalyzer

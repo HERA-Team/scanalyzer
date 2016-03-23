@@ -59,11 +59,11 @@ Usage
 Launch with
 
 ```
-scanalyzer go <visibility-data-set> <output-flag-file-name>
+scanalyzer go <visibility-data-set> [output-flag-file-name]
 ```
 
-**TODO**: flags will be saved to the output file on the fly, but the file
-cannot currently be reloaded at a later invocation!
+**TODO**: flags can be saved to an output file on the fly, but the file cannot
+currently be reloaded at a later invocation!
 
 Either MIRIAD or CASA visibility data sets are supported if the necessary
 supporting modules are available. There are a few other modes that can be

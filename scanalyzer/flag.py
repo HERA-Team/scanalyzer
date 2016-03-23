@@ -121,6 +121,10 @@ class FlagImplementation (FlagAPI):
         self.records = []
         self.path = path
 
+        if path is None:
+            from pwkit.cli import warn
+            warn ('flags will not be saved to disk')
+
 
     def add (self, tst, tend, fst, fend, bpmatch):
         if (tst is None) ^ (tend is None):
@@ -291,6 +295,9 @@ class FlagImplementation (FlagAPI):
 
 
     def try_load (self):
+        if self.path is None:
+            return # nothing to do here
+
         from pwkit.io import try_open
 
         f = try_open (self.path)
@@ -300,6 +307,9 @@ class FlagImplementation (FlagAPI):
 
 
     def save (self):
+        if self.path is None:
+            return # nothing to do here
+
         from os import rename
         self._save (open (self.path + '.new', 'w'))
         try:
