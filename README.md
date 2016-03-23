@@ -66,13 +66,18 @@ Super-quick summary of the interactive interface:
 * `j` and `k` or left-button and right-button single clicks to move between looking at the
   real, imaginary, amplitude, and phase components.
 * `a` to toggle showing of flagged data
+* Hold down the `Ctrl` key to get a live readout of data properties
 
-To flag interactively, click and drag to draw boxes, then:
+Draw boxes by clicking and dragging, then:
 
+* `z` to zoom in to that box; `Z` to zoom out
 * `c` to flag the box only on the current baseline
 * `b` to flag it on all baselines
-* `e` to toggle the box-editing mode where you can see existing boxes, apply
-  or unapply them to the current baseline, and edit their shapes.
+* `h` to extend the box infinitely in the horizontal (frequency) direction
+* `v` to extend the box infinitely in the vertical (time) direction
+
+Use `e` to toggle the box-editing mode where you can see existing boxes, apply
+or unapply them to the current baseline, and edit their shapes.
 
 
 Authors
