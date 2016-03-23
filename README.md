@@ -39,7 +39,16 @@ is the one that needs changing.
 Usage
 -----
 
-Super-quick summary:
+Launch with
+
+```
+scanalyzer go <visibility-data-set> <output-flag-file-name>
+```
+
+There are a few other modes that can be learned about by simply running
+`scanalyzer` with no arguments.
+
+Super-quick summary of the interactive interface:
 
 * `q` and `w` to move between baselines
 * `j` and `k` or left-button and right-button single clicks to move between looking at the
