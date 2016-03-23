@@ -24,14 +24,23 @@ It depends on a few packages that you may not already have installed:
   conda install -c pkgw gtk3 pygobject3
   ```
 
-* The `miriad-python` package for reading MIRIAD datasets. **TODO**: this will
-  be the pain point in the installation until I make some tidier packages for
-  Anaconda. You can learn about downloading and installing `miriad-python`
+* If you want to read MIRIAD data sets, you need the `miriad-python` package.
+  **TODO**: this will be the pain point in the installation until I make some
+  tidier packages for Anaconda. You can learn about downloading and installing
+  `miriad-python`
   [here](https://www.cfa.harvard.edu/~pwilliam/miriad-python/). It requires an
   autotools-based CARMA MIRIAD install, as provided by
   [this tarball](https://www.cfa.harvard.edu/~pwilliam/miriad-macport/miriad-latest.tar.gz).
 
-**TODO**: no reason we can't use AIPY to read in the data.
+* If you want to read CASA datasets, you need the CASA libraries and their
+  Python bindings. If you use Anaconda Python, you can install the needed
+  libraries with the command:
+
+  ```
+  conda install -c pkgw casa-data casa-python
+  ```
+
+**TODO**: no reason we can't use AIPY to read in MIRIAD data.
 [This function](https://github.com/HERA-Team/scanalyzer/blob/master/scanalyzer/transpose.py#L125)
 is the one that needs changing.
 
@@ -45,8 +54,9 @@ Launch with
 scanalyzer go <visibility-data-set> <output-flag-file-name>
 ```
 
-There are a few other modes that can be learned about by simply running
-`scanalyzer` with no arguments.
+Either MIRIAD or CASA visibility data sets are supported if the necessary
+supporting modules are available. There are a few other modes that can be
+learned about by simply running `scanalyzer` with no arguments.
 
 Super-quick summary of the interactive interface:
 
