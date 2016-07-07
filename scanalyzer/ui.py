@@ -15,7 +15,7 @@ from gi.repository import Gdk, Gtk
 import cairo
 import numpy as np
 from . import mtutil as util
-from .mtutil import POL_XX, POL_YY, POL_XY, POL_YX #, jdToFull
+from .mtutil import POL_XX, POL_YY, POL_XY, POL_YX, POL_RR, POL_LL
 
 def jdToFull (t):
     return '%.5f' % t
@@ -242,6 +242,8 @@ SEL_POL_INTENS = 11
 SEL_POL_NONINTENS = 12
 SEL_POL_XX = POL_XX
 SEL_POL_YY = POL_YY
+SEL_POL_RR = POL_RR
+SEL_POL_LL = POL_LL
 
 SEL_ANTPOL_ALL = 0
 SEL_ANTPOL_ANT = 1
@@ -435,6 +437,8 @@ class Scanalyzer (object):
         ls.append ((SEL_POL_NONINTENS, 'Non-intensity-type'))
         ls.append ((SEL_POL_XX, 'XX'))
         ls.append ((SEL_POL_YY, 'YY'))
+        ls.append ((SEL_POL_RR, 'RR'))
+        ls.append ((SEL_POL_LL, 'LL'))
         cb = get ('sel_pol_cb')
         cr = Gtk.CellRendererText ()
         cb.pack_start (cr, True)
