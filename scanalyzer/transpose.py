@@ -430,8 +430,17 @@ def _mir_transpose (vpath, tpath, unused_transpose_args):
 # MeasurementSet transposition
 
 def ms_transpose (vpath, tpath, transpose_args):
+    squash_time_gaps = transpose_args.pop ('squash_time_gaps', 'n')
+    if squash_time_gaps == 'y':
+        squash_time_gaps = True
+    elif squash_time_gaps == 'n':
+        squash_time_gaps = False
+    else:
+        die ('"squash_time_gaps" keyword must be either "y" or "n"')
+
     try:
-        return _ms_transpose (vpath, tpath, transpose_args)
+        return _ms_transpose (vpath, tpath, transpose_args,
+                              squash_time_gaps=squash_time_gaps)
     except:
         # The unlink can overwrite the exception info that
         # an argumentless "raise" would reraise.
@@ -443,7 +452,7 @@ def ms_transpose (vpath, tpath, transpose_args):
         raise t, v, tb
 
 
-def _ms_transpose (vpath, tpath, transpose_args):
+def _ms_transpose (vpath, tpath, transpose_args, squash_time_gaps=False):
     from pwkit.environments.casa import util as casautil
     b = casautil.sanitize_unicode
 
@@ -575,20 +584,49 @@ def _ms_transpose (vpath, tpath, transpose_args):
     tscale = ntslot * 1. / nt
     ntoff = 0
 
+    if squash_time_gaps:
+        slot_to_data = np.zeros (ntslot, dtype=np.int) - 1
+
     for i in xrange (nt):
         timemap[i] = int (round (tidxs[i]))
         if (tidxs[i] - timemap[i]) > 0.01:
             ntoff += 1
 
+        if squash_time_gaps:
+            slot_to_data[timemap[i]] = i
+
     if ntoff > 0:
         warn ('had %d timestamps (out of %d) with poor mapping onto the grid',
               ntoff, nt)
+
+    if squash_time_gaps:
+        # Re-index the data to remove time gaps. As a convenience we throw in
+        # a small break between discrete observations.
+        seen_any = False
+        in_populated_run = False
+        squashed_idx = 0
+        new_gap_size = 1
+
+        for i in xrange (ntslot):
+            if slot_to_data[i] == -1:
+                # There are no data for this slot.
+                in_populated_run = False
+            else:
+                # There are data for this slot.
+                if not in_populated_run and seen_any:
+                    squashed_idx += new_gap_size
+                timemap[slot_to_data[i]] = squashed_idx
+                squashed_idx += 1
+                seen_any = True
+                in_populated_run = True
+
+        ntslot = squashed_idx
+        tscale = ntslot * 1. / nt
 
     if tscale > 1.05:
         warn ('data size increasing by factor of %.2f to get everything onto '
               'the time grid', tscale)
 
-    times = np.arange (ntslot) * cadence + time0
     nt = ntslot
 
     # Now do the same thing for the spectral windows that are actually used,
