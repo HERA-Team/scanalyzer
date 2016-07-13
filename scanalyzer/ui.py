@@ -673,20 +673,13 @@ class Scanalyzer (object):
 
     def format_antnum (self, antnum):
         "Note that this operates on 1-based antenna names."
-        if self.tdata_base.hasFeature ('antnames'):
-            return self.tdata_base._antnames[antnum - 1]
-        return str (antnum)
+        return self.tdata_base.getAntName (antnum)
 
 
     def format_ap (self, ap):
         antidx = ap >> 3
         fp = ap & 0x7
-
-        if self.tdata_base.hasFeature ('antnames'):
-            s = self.tdata_base._antnames[antidx]
-        else:
-            s = str (antidx + 1)
-
+        s = self.tdata_base.getAntName (antidx + 1)
         return s + util.fPolNames[fp]
 
 

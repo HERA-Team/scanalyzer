@@ -1051,5 +1051,11 @@ class TransposeFile (TransposeData):
         return self.vars['meanuvws'][bpidx]
 
 
+    def getAntName (self, antnum):
+        if 'antnames' not in self._features:
+            return str (antnum)
+        return self._antnames[antnum - 1]
+
+
     def knownAllFlagged (self, bp):
         return bp in self._flaggedbpset

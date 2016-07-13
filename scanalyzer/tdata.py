@@ -280,7 +280,7 @@ class DataTransform (TransposeData):
     # imply semantics that implementations must be aware of.
 
     _myfeatures = ()
-    _passthroughfeatures = frozenset (('delays', 'meanuvw', 'checkallflagged'))
+    _passthroughfeatures = frozenset (('antnames', 'delays', 'meanuvw', 'checkallflagged'))
 
     def hasFeature (self, name):
         if name in self._myfeatures:
@@ -288,6 +288,9 @@ class DataTransform (TransposeData):
         if name not in self._passthroughfeatures:
             return False
         return self.parent.hasFeature (name)
+
+    def getAntName (self, antnum):
+        return self.parent.getAntName (antnum)
 
     def getDelay (self, bp):
         return self.parent.getDelay (bp)
