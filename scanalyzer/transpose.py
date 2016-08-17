@@ -681,6 +681,9 @@ def _ms_transpose (vpath, tpath, transpose_args, squash_time_gaps=False):
 
             ddprevidx = ddidx
 
+        if ddstep == -1:
+            ddidx0 = ddidx
+
         ddfreqmap.append ((ddidx0, ddfreqs.size, ddstep))
         maxnchan = max (maxnchan, ddfreqs.size)
 
