@@ -290,8 +290,40 @@ class FlagImplementation (FlagAPI):
             print (' '.join (record), file=stream)
 
 
-    def _load (self, stream):
-        raise NotImplementedError
+    def _load(self, stream):
+        from .mtutil import parseBP
+
+        for line in stream:
+            bits = line.split('#', 1)[0].strip().split()
+            if not len(bits):
+                continue
+
+            tst = tend = fst = fend = None
+            bpmatch = None
+
+            for bit in bits:
+                if bit.startswith('freq(') and bit.endswith(')'):
+                    subbits = bit[5:-1].split(',')
+                    if len(subbits) != 2:
+                        raise Exception('unhandled line in flags file (A): %r' % (line,))
+                    fst, fend = map(float, subbits)
+                elif bit.startswith('time(') and bit.endswith(')'):
+                    # XXX: hardcoding our fake jdToFull that uses floats
+                    subbits = bit[5:-1].split(',')
+                    if len(subbits) != 2:
+                        raise Exception('unhandled line in flags file (B): %r' % (line,))
+                    tst, tend = map(float, subbits)
+                elif bit.startswith('basepol(') and bit.endswith(')'):
+                    bpmatch = set()
+                    for bptext in bit[8:-1].split(','):
+                        bpmatch.add(parseBP(bptext))
+                    if not len(bpmatch):
+                        # empty-set bpmatch signifies DELETED
+                        raise Exception('unhandled line in flags file (C): %r' % (line,))
+                else:
+                    raise Exception('unhandled line in flags file (D): %r' % (line,))
+
+            self.records.append([tst, tend, fst, fend, bpmatch])
 
 
     def try_load (self):
