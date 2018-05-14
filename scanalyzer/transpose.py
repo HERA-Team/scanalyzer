@@ -13,6 +13,8 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 __all__ = (b'mir_transpose ms_transpose TransposeFile').split ()
 
 import sys, os.path, time
+from six.moves import range
+from six import iteritems, iterkeys
 from struct import Struct
 import numpy as np
 
@@ -112,13 +114,13 @@ def mir_transpose (vpath, tpath, transpose_args):
             os.unlink (tpath)
         except:
             pass
-        raise t, v, tb
+        raise t
 
 
 def savevariable (stream, name, array):
     if len (name) > 32:
         raise ValueError (name)
-    stream.write (variable.pack (VARIABLE_MAGIC, binary_type (name)))
+    stream.write (variable.pack (VARIABLE_MAGIC, binary_type (name, encoding='utf8')))
     np.save (stream, array)
 
 
@@ -195,7 +197,7 @@ def _mir_transpose (vpath, tpath, unused_transpose_args):
     scale = nslot * 1. / nt
     noff = 0
 
-    for i in xrange (nt):
+    for i in range (nt):
         timemap[i] = int (round (tidxs[i]))
         if (tidxs[i] - timemap[i]) > 0.01:
             noff += 1
@@ -285,7 +287,7 @@ def _mir_transpose (vpath, tpath, unused_transpose_args):
         nbatch = len (curtimes)
 
         tidxs = np.empty (nbatch, dtype=np.int)
-        for time, sidx in curtimes.iteritems ():
+        for time, sidx in iteritems(curtimes):
             tidxs[sidx] = timemap[datatimes.searchsorted (time)]
             lsts[tidxs[sidx]] = lstbuf[sidx]
 
@@ -294,10 +296,10 @@ def _mir_transpose (vpath, tpath, unused_transpose_args):
         info[:,1] = tidxs[info[:,0]]
         info[0,2] = 1
 
-        for i in xrange (1, nbatch):
+        for i in range (1, nbatch):
             info[i,2] = (info[i,1] != info[i-1,1] + 1)
 
-        for bpidx in xrange (nbp):
+        for bpidx in range (nbp):
             for sidx, tidx, seek in info:
                 if seek:
                     f.seek (corr_offset (bpidx, tidx))
@@ -352,14 +354,14 @@ def _mir_transpose (vpath, tpath, unused_transpose_args):
 
                 msg = '   %3.1f%% (%d/%d) elapsed %s ETA %s total %s' % \
                     (pct, currec, nrecs, _sfmt (elapsed), _sfmt (eta), _sfmt (total))
-                print (msg.ljust (60) + '\r', end='', file=unbufout)
+                unbufout.write(msg.ljust (60).encode('utf8') + b'\r')
                 tlastprint = now
 
         currec += 1
 
         if t not in curtimes and len (curtimes) == nsimult:
             msg = '   %3.1f%% (%d/%d) writing ...' % (pct, currec, nrecs)
-            print (msg.ljust (60) + '\r', file=unbufout)
+            unbufout.write(msg.ljust (60).encode('utf8') + b'\r\n')
             dump (curtimes)
             newchunk = True
 
@@ -393,7 +395,7 @@ def _mir_transpose (vpath, tpath, unused_transpose_args):
 
     if len (curtimes):
         msg = '   100%% (%d/%d) writing ...' % (currec, nrecs)
-        print (msg.ljust (60) + '\r', end='', file=unbufout)
+        unbufout.write(msg.ljust (60).encode('utf8') + b'\r')
         dump (curtimes)
 
     tfinish = time.time ()
@@ -449,7 +451,7 @@ def ms_transpose (vpath, tpath, transpose_args):
             os.unlink (tpath)
         except:
             pass
-        raise t, v, tb
+        raise
 
 
 def _ms_transpose (vpath, tpath, transpose_args, squash_time_gaps=False):
@@ -478,7 +480,7 @@ def _ms_transpose (vpath, tpath, transpose_args, squash_time_gaps=False):
     npids = numcorrs.size
     prodinfo = [None] * npids
 
-    for i in xrange (npids):
+    for i in range (npids):
         corrtypes = tb.getcell (b'CORR_TYPE', i)
         prodinfo[i] = [casautil.pol_to_miriad[c] for c in corrtypes]
 
@@ -494,7 +496,7 @@ def _ms_transpose (vpath, tpath, transpose_args, squash_time_gaps=False):
     nspws = tb.getcol (b'NUM_CHAN').size
     sfreqs = []
 
-    for i in xrange (nspws):
+    for i in range (nspws):
         sfreqs.append (tb.getcell (b'CHAN_FREQ', i) * 1e-9) # Hz -> GHz
 
     tb.close ()
@@ -508,14 +510,14 @@ def _ms_transpose (vpath, tpath, transpose_args, squash_time_gaps=False):
     fullnames = []
     maxnamelen = 0
 
-    for i in xrange (nants):
+    for i in range (nants):
         f = '%s@%s' % (names[i], stations[i])
         fullnames.append (f)
         maxnamelen = max (maxnamelen, len (f))
 
     antnames = np.zeros ((nants, maxnamelen), dtype=np.byte)
 
-    for i in xrange (nants):
+    for i in range (nants):
         f = fullnames[i]
         n = len (f)
         antnames[i,:n] = np.fromstring (f, dtype=np.byte)
@@ -526,7 +528,7 @@ def _ms_transpose (vpath, tpath, transpose_args, squash_time_gaps=False):
     ms.open (vispath ())
     ms_selectors = frozenset ('array baseline field observation polarization '
                               'scan scanintent spw taql time uvdist'.split ())
-    mssel = dict (kv for kv in transpose_args.iteritems ()
+    mssel = dict (kv for kv in iteritems(transpose_args)
                   if kv[0] in ms_selectors)
     # ms.selectinit () needed for selectpolarization() below
     ms.msselect (b(mssel))
@@ -551,7 +553,7 @@ def _ms_transpose (vpath, tpath, transpose_args, squash_time_gaps=False):
         cols = ms.getdata (items=colnames)
         # time is (chunksize)
 
-        for i in xrange (cols['time'].size):
+        for i in range (cols['time'].size):
             t = cols['time'][i] / 86400. + 2400000.5 # CASA to miriad timesystems
 
             ddid = cols['data_desc_id'][i]
@@ -562,7 +564,7 @@ def _ms_transpose (vpath, tpath, transpose_args, squash_time_gaps=False):
 
             seenspws.add (ddid_to_spwid[ddid])
 
-            for j in xrange (len (pi)):
+            for j in range (len (pi)):
                 nrecs += 1
                 pbp = mtutil.bpToPBP32 (mtutil.aap2bp (a1, a2, pi[j]))
                 times.add (t)
@@ -587,7 +589,7 @@ def _ms_transpose (vpath, tpath, transpose_args, squash_time_gaps=False):
     if squash_time_gaps:
         slot_to_data = np.zeros (ntslot, dtype=np.int) - 1
 
-    for i in xrange (nt):
+    for i in range (nt):
         timemap[i] = int (round (tidxs[i]))
         if (tidxs[i] - timemap[i]) > 0.01:
             ntoff += 1
@@ -607,7 +609,7 @@ def _ms_transpose (vpath, tpath, transpose_args, squash_time_gaps=False):
         squashed_idx = 0
         new_gap_size = 1
 
-        for i in xrange (ntslot):
+        for i in range (ntslot):
             if slot_to_data[i] == -1:
                 # There are no data for this slot.
                 in_populated_run = False
@@ -647,7 +649,7 @@ def _ms_transpose (vpath, tpath, transpose_args, squash_time_gaps=False):
     nfoff = 0
     maxnchan = 0
 
-    for i in xrange (len (ddid_to_spwid)):
+    for i in range (len (ddid_to_spwid)):
         spwid = ddid_to_spwid[i]
         if spwid not in seenspws:
             ddfreqmap.append (None)
@@ -665,7 +667,7 @@ def _ms_transpose (vpath, tpath, transpose_args, squash_time_gaps=False):
         else:
             ddstep = 1
 
-        for j in xrange (ddfreqs.size):
+        for j in range (ddfreqs.size):
             trueidx = (ddfreqs[j] - freq0) / sdf
             ddidx = int (round (trueidx))
 
@@ -725,7 +727,7 @@ def _ms_transpose (vpath, tpath, transpose_args, squash_time_gaps=False):
         return (data_offset + bpidx * slice_bytes + (corr_bytes + flag_bytes) * nt +
                 uvww_bytes * tidx)
 
-    f = open (tpath, 'w+', 0)
+    f = open (tpath, 'wb+', 0)
     f.truncate (vars_offset) # hint how big the file will be
     f.write (header.pack (BYTE_ORDER_MARKER,
                           FORMAT_VERSION,
@@ -751,9 +753,9 @@ def _ms_transpose (vpath, tpath, transpose_args, squash_time_gaps=False):
 
         pct = 100. * currec / nrecs
         msg = '   %3.1f%% (%d/%d) writing ...' % (pct, currec, nrecs)
-        print (msg.ljust (60) + '\r', end='', file=unbufout)
+        unbufout.write(msg.ljust (60).encode('utf8') + b'\r')
 
-        offsets = sorted (buffer_info.iterkeys ())
+        offsets = sorted (iterkeys(buffer_info))
         curofs = None
 
         for offset in offsets:
@@ -786,7 +788,7 @@ def _ms_transpose (vpath, tpath, transpose_args, squash_time_gaps=False):
 
     print ('pass 2 ...')
 
-    unbufout = os.fdopen (os.dup (1), 'w', 0)
+    unbufout = os.fdopen (os.dup (1), 'wb', 0)
     tstart = time.time ()
     tlastprint = 0
     nvis = 0
@@ -812,7 +814,7 @@ def _ms_transpose (vpath, tpath, transpose_args, squash_time_gaps=False):
         data = cols[datacol]
         flags = cols['flag']
 
-        for i in xrange (cols['time'].size):
+        for i in range (cols['time'].size):
             t = cols['time'][i] / 86400. + 2400000.5 # CASA to miriad timesystems
             tidx = timemap[datatimes.searchsorted (t)]
             ddid = cols['data_desc_id'][i]
@@ -833,12 +835,12 @@ def _ms_transpose (vpath, tpath, transpose_args, squash_time_gaps=False):
 
                     msg = '   %3.1f%% (%d/%d) elapsed %s ETA %s total %s' % \
                         (pct, currec, nrecs, _sfmt (elapsed), _sfmt (eta), _sfmt (total))
-                    print (msg.ljust (60) + '\r', end='', file=unbufout)
+                    unbufout.write(msg.ljust (60).encode('utf8') + b'\r')
                     tlastprint = now
 
             nvis += npol * nchan
 
-            for j in xrange (npol):
+            for j in range (npol):
                 currec += 1
                 pbp = mtutil.bpToPBP32 (mtutil.aap2bp (a1, a2, pi[j]))
                 bpidx = pbps.searchsorted (pbp)
@@ -879,7 +881,7 @@ def _ms_transpose (vpath, tpath, transpose_args, squash_time_gaps=False):
     savevariable (f, 'antnames', antnames)
     flaggedbps = pbps[np.where (seenany == 0)]
     savevariable (f, 'flaggedbps', flaggedbps)
-    s = ' '.join ('%s=%s' % t for t in transpose_args.iteritems ())
+    s = ' '.join ('%s=%s' % t for t in iteritems(transpose_args))
     savevariable (f, 'transargs', np.fromstring (b(s), dtype=np.byte))
 
     wbad = np.where (muvwcounts == 0)
@@ -934,7 +936,7 @@ class TransposeFile (TransposeData):
             if magic != VARIABLE_MAGIC:
                 raise Exception ('corrupted variable table?')
 
-            name = name.replace ('\0', '')
+            name = name.replace (b'\0', b'').decode('utf8')
             self.vars[name] = np.load (handle)
 
         if 'basepols' not in self.vars:
@@ -960,8 +962,8 @@ class TransposeFile (TransposeData):
             nants = binnames.shape[0]
             self._antnames = antnames = [None] * nants
 
-            for i in xrange (nants):
-                antnames[i] = binnames[i].tostring ()
+            for i in range (nants):
+                antnames[i] = binnames[i].tostring ().decode('utf8')
 
 
     def hasFeature (self, name):

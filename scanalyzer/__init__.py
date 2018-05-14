@@ -13,6 +13,7 @@ from __future__ import absolute_import, division, print_function, unicode_litera
 __all__ = str('get_transposed launch').split ()
 
 from os.path import exists, join
+from six import iterkeys
 
 from pwkit import PKError
 
@@ -25,14 +26,14 @@ def get_transposed (path, transpose_args):
         # It's a MeasurementSet!! Hacks.
         import hashlib
         h = hashlib.sha1 ()
-        h.update (path)
-        h.update ('args')
-        for name in sorted (transpose_args.iterkeys ()):
+        h.update (path.encode('utf8'))
+        h.update (b'args')
+        for name in sorted (iterkeys(transpose_args)):
             if name[0] != '_':
-                h.update (name)
-                h.update ('1')
-                h.update (transpose_args[name])
-                h.update ('2')
+                h.update (name.encode('utf8'))
+                h.update (b'1')
+                h.update (transpose_args[name].encode('utf8'))
+                h.update (b'2')
         vhash = h.digest ()
         tfunc = transpose.ms_transpose
     else:
@@ -43,7 +44,7 @@ def get_transposed (path, transpose_args):
         vhash = h.digest ()
         tfunc = transpose.mir_transpose
 
-    tpath = 'transpose.' + vhash.encode ('hex') + '.dat'
+    tpath = 'transpose.' + vhash.hex() + '.dat'
 
     if exists (tpath):
         print ('Loading', tpath, '...')
@@ -58,7 +59,7 @@ def get_transposed (path, transpose_args):
         print ('  Visibility rate: %.0f/s' % (nvis / elapsed))
         print ('  Write rate: %.0f kiB/s' % (nbyte / elapsed / 1024))
 
-    return transpose.TransposeFile (open (tpath, 'r+'))
+    return transpose.TransposeFile (open (tpath, 'rb+'))
 
 
 def launch (path, flagpath=None, transpose_args={}):

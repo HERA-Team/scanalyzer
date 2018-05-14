@@ -1769,7 +1769,7 @@ class Scanalyzer (object):
 
         try:
             newbpmatch = rfitest.decide (self.bpsel_list, sst.getGrid)
-        except Exception, e:
+        except Exception as e:
             print ('*** Exception raise in magic flagging routine!')
             import traceback
             traceback.print_exc ()

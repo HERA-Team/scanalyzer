@@ -346,7 +346,7 @@ class FlagImplementation (FlagAPI):
         self._save (open (self.path + '.new', 'w'))
         try:
             rename (self.path, self.path + '~')
-        except OSError, e:
+        except OSError as e:
             if e.errno != 2:
                 raise
         rename (self.path + '.new', self.path)

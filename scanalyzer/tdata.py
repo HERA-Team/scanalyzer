@@ -11,12 +11,12 @@ the sort of U/V gridding that happens during imaging.
 This module requires Gtk+3 for the interactive transform controller widgets.
 
 """
-from __future__ import absolute_import, division, print_function, unicode_literals
+from __future__ import absolute_import, division, print_function
 
-__all__ = (b'''GridAxis VisGrid TransposeData DataTransform
+__all__ = '''GridAxis VisGrid TransposeData DataTransform
            MeanSubtractTransform TopocentrizeTransform
            AverageTransform SubsetTransform HacktasticDDRTransform
-           CustomTransform''').split ()
+           CustomTransform'''.split ()
 
 import numpy as np
 
