@@ -181,6 +181,17 @@ def makePhaseRenderer (samplevgrid=None):
     return wrapSimpleRenderer (p, WrappingRenderer (2 * np.pi))
 
 
+def makeUnfixedPhaseRenderer (samplevgrid=None):
+    # always keep it centered on zero phase, but let the bounds slide around
+    ssd = simpleSampleData (samplevgrid)
+    ph = np.arctan2 (ssd.imag, ssd.real)
+    phmax = max (abs (ph.max ()), abs (ph.min ()))
+    drr = DualRampRenderer (-phmax, phmax)
+
+    p = lambda x: np.arctan2 (x.imag, x.real)
+    return wrapSimpleRenderer (p, drr)
+
+
 def makePhaseUncertRenderer (samplevgrid=None):
     if samplevgrid.allFlagged ():
         umax = 0
@@ -260,6 +271,7 @@ QUANT_REAL = 2
 QUANT_IMAG = 3
 QUANT_PHUNCERT = 4
 QUANT_SYSPHASE = 5
+QUANT_PHA_UNFIXED = 6
 
 RESIZE_LEFT = 0
 RESIZE_RIGHT = 1
@@ -284,6 +296,7 @@ _rendererMakers = {QUANT_AMP: makeAmpRenderer,
                    QUANT_IMAG: makeImagRenderer,
                    QUANT_PHUNCERT: makePhaseUncertRenderer,
                    QUANT_SYSPHASE: makeSystemPhaseRenderer,
+                   QUANT_PHA_UNFIXED: makeUnfixedPhaseRenderer,
                    }
 
 from os.path import dirname, join
@@ -975,6 +988,7 @@ class Scanalyzer (object):
         ls.append ((QUANT_IMAG, 'Imaginary', True, True))
         ls.append ((QUANT_AMP, 'Amplitude', True, True))
         ls.append ((QUANT_PHA, 'Phase', True, True))
+        ls.append ((QUANT_PHA_UNFIXED, 'Unfixed Phase', True, True))
         ls.append ((0, '', True, True))
         ls.append ((QUANT_PHUNCERT, 'Phase Uncert.', False, False))
         ls.append ((QUANT_SYSPHASE, 'System Phase', False, False))
